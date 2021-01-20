@@ -71,7 +71,7 @@ class Data(object):
         return self.calculate_most_accuracy(data), self.group_data(data), samples
 
     @staticmethod
-    def calculate_accuracy(data):
+    def calculate_mean_accuracy(data):
         return sum([value[1] for value in data]) / len(data)
 
     @staticmethod
