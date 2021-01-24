@@ -2,7 +2,8 @@ from enum import Enum
 
 
 class Experiment(Enum):
-    All = -1
+    All = -2
+    Random = -1
     Fig1 = 0
     Fig2 = 1
     Fig3 = 2
