@@ -22,7 +22,7 @@ class Data(object):
     def generate_dataframe(self, filename):
         return pd.read_csv(filename, index_col=0).iloc[:, 2:].replace(True, 1).replace(False, 0)
 
-    def sample_data(self, samples, experts, experiment=Experiment.Random, distributions=None):
+    def sample_data(self, samples, experts=Experts.All, experiment=Experiment.Random, distributions=None):
 
         # experiment
         if experiment == Experiment.All:

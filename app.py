@@ -5,6 +5,7 @@ from experiment import Experiment
 from experts import Experts
 import time
 import uuid
+from terminal_colors import terminal_colors
 
 
 class App(object):
@@ -14,6 +15,10 @@ class App(object):
         self.num_of_users = 20
         self.budget = 100
         self.num_batch = 10000
+        self.beginners_range = range(0, 20)
+        self.medium_range = range(0, 1)
+        self.experts_range = range(1, 2)
+
 
     def num_of_users_sample_data(self, experts, num_of_users, num_batch):
         samples_averages = []
@@ -39,6 +44,25 @@ class App(object):
 
         return samples_averages, budget_iterations
 
+    def ranges_sample_data(self, num_batch, beginners_range, medium_range, experts_range):
+
+        samples_averages = []
+        iterations = []
+        for num_beginners in beginners_range:
+            for num_medium in medium_range:
+                for num_experts in experts_range:
+                    num_samples = num_beginners + num_medium + num_experts
+                    samples = [self.data.sample_data(samples=num_samples, experiment=Experiment.Random, distributions={
+                        Experts.Beginner: num_beginners / num_samples,
+                        Experts.Medium: num_medium / num_samples,
+                        Experts.Expert: num_experts / num_samples
+                    })[0] for i in range(num_batch)]
+                    samples_averages.append(sum(samples) / len(samples))
+                    print('Iteration Num: ' + str(len(iterations)) + ', ' + 'Beginners: ' + str(num_beginners) + ', Medium: ' + str(num_medium) + ', Experts: ' + str(num_experts) + ', Sum: ' + str(num_samples) + ', Result: ' + str(sum(samples) / len(samples)))
+                    iterations.append(','.join([str(num_beginners), str(num_medium), str(num_experts)]))
+        return samples_averages, iterations
+
+    # sample by users number
     def first_experiment(self):
         # beginner
         print('Start Beginner')
@@ -100,6 +124,7 @@ class App(object):
         print('End Log Result')
         print('Time elapsed: ' + str(time.time() - self.start_time) + ' seconds.')
 
+    # sample by budget (seconds count)
     def second_experiment(self):
         # beginner
         print('Start Beginner')
@@ -161,20 +186,72 @@ class App(object):
         print('End Log Result')
         print('Time elapsed: ' + str(time.time() - self.start_time) + ' seconds.')
 
+    # sample by users number and distributions
+    def third_experiment(self):
+        # beginner
+        print('Start Experiment')
+        samples_averages, iterations = self.ranges_sample_data(
+            num_batch=self.num_batch,
+            beginners_range=self.beginners_range,
+            medium_range=self.medium_range,
+            experts_range=self.experts_range,
+        )
+        print('End Experiment')
+        print('Time elapsed: ' + str(time.time() - self.start_time) + ' seconds.')
+
+
+        # # plot
+        # print('Start Plot And Saving Plot File')
+        # plt.ylabel('Sample Averages')
+        # plt.xlabel('Iterations')
+        # plt.plot(iterations, samples_averages, 'o', color='blue', label='Beginner (2 seconds)')
+        # plt.legend(loc='best')
+        # output_file_name = 'result_' + str(self.num_batch) + '_count_' + str(self.num_of_users) + '_users_' + uuid.uuid4().hex
+        # plot_output_file_name = output_file_name + '.png'
+        # plt.savefig(plot_output_file_name)
+        # plt.show()
+        # print('End Plot And Saving Plot File')
+        # print('Time elapsed: ' + str(time.time() - self.start_time) + ' seconds.')
+        #
+        # # save files
+        # print('Start Saving Text File')
+        # text_output_file_name = output_file_name + '.txt'
+        # with open(text_output_file_name, 'w+') as output_file:
+        #     output_file.write('Samples Averages:' + str([round(value, 3) for value in samples_averages]) + '\n')
+        # print('End Saving Text File')
+        # print('Time elapsed: ' + str(time.time() - self.start_time) + ' seconds.')
+
+        # log
+        print('Start Log Result')
+        print(terminal_colors.OKGREEN + 'Samples Averages:' + str([round(value, 3) for value in samples_averages]) + terminal_colors.ENDC)
+        print('End Log Result')
+        print('Time elapsed: ' + str(time.time() - self.start_time) + ' seconds.')
+
 
 def start(args):
     # init app
     app = App()
 
     # first experiment
-    app.num_batch = 10000
-    app.num_of_users = 20
+    # app.num_batch = 10000
+    # app.num_of_users = 20
     # app.first_experiment()
 
     # second experiment
-    app.num_batch = 10000
-    app.budget = 100
-    app.second_experiment()
+    # app.num_batch = 10000
+    # app.budget = 100
+    # app.second_experiment()
 
+    # third experiment
+    app.num_batch = 10000
+    app.beginners_range = range(0, 1)
+    app.medium_range = range(2, 3)
+    app.experts_range = range(0, 1)
+    app.third_experiment()
+
+    app.beginners_range = range(5, 6)
+    app.medium_range = range(1, 2)
+    app.experts_range = range(0, 1)
+    app.third_experiment()
 
 start(sys.argv)
