@@ -1,0 +1,6 @@
+# Created by .ignore support plugin (hsz.mobi)
+__pycache__/data.cpython-37.pyc
+__pycache__/experiment.cpython-37.pyc
+__pycache__/experts.cpython-37.pyc
+samping.png
+venv/include/
