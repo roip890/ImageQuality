@@ -1,9 +1,10 @@
 import pandas as pd
-from experts import Experts
-from experiment import Experiment
 import random
 import operator
 from itertools import groupby
+
+from utils.experiment import Experiment
+from utils.experts import Experts
 
 NUM_EXPERIMENTS = 10
 NUM_USERS = 50
