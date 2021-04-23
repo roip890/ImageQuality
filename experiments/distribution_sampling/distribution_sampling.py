@@ -21,7 +21,7 @@ class DistributionSampling(object):
         self.beginners_range = range(0, 20)
         self.medium_range = range(0, 1)
         self.experts_range = range(1, 2)
-        self.accuracy_function = Data.calculate_most_accuracy
+        self.accuracy_function = Data.calculate_most_accuracy()
         self.saved_data_dir = 'experiments/distribution_sampling/saved_data'
         Path(self.saved_data_dir).mkdir(parents=True, exist_ok=True)
 
@@ -34,10 +34,11 @@ class DistributionSampling(object):
         logger.log(f'Experiment: DistributionSampling')
         logger.log(f'Num Users: {self.num_of_users}')
         logger.log(f'Num Batch: {self.num_batch}')
-        logger.log(f'Num Budget: {self.beginners_range}')
-        logger.log(f'Num Budget: {self.medium_range}')
-        logger.log(f'Num Budget: {self.experts_range}')
-        logger.log(f'Num Budget: {self.accuracy_function}')
+        logger.log(f'Budget Amount: {self.budget}')
+        logger.log(f'Beginners Range: {self.beginners_range}')
+        logger.log(f'Medium Range: {self.medium_range}')
+        logger.log(f'Experts Range: {self.experts_range}')
+        logger.log(f'Accuracy Function: {self.accuracy_function}')
 
         # beginner
         logger.log('Start Experiment')

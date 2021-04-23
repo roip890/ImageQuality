@@ -34,10 +34,11 @@ class DistributionAndBudgetSampling(object):
         logger.log(f'Experiment: DistributionAndBudgetSampling')
         logger.log(f'Num Users: {self.num_of_users}')
         logger.log(f'Num Batch: {self.num_batch}')
-        logger.log(f'Num Budget: {self.beginners_range}')
-        logger.log(f'Num Budget: {self.medium_range}')
-        logger.log(f'Num Budget: {self.experts_range}')
-        logger.log(f'Num Budget: {self.accuracy_function}')
+        logger.log(f'Budget Amount: {self.budget}')
+        logger.log(f'Beginners Range: {self.beginners_range}')
+        logger.log(f'Medium Range: {self.medium_range}')
+        logger.log(f'Experts Range: {self.experts_range}')
+        logger.log(f'Accuracy Function: {self.accuracy_function}')
 
         # distribution
         logger.log('Start Distribution Experiment')
@@ -158,49 +159,19 @@ class DistributionAndBudgetSampling(object):
         return samples_averages, budget_iterations
 
     def test(self):
-        # # compare expert with combination of beginners and experts
-        # self.num_batch = 100000
-        # self.beginners_range = range(0, 6)
-        # self.medium_range = range(0, 1)
-        # self.experts_range = range(2, 3)
-        # # self.accuracy_function = Data.calculate_weighted_most_accuracy
-        # self.accuracy_function = Data.calculate_most_accuracy_with_tie_breaker(tie_breaker=Experts.Expert)
-        # # self.accuracy_function = Data.calculate_most_accuracy
-        # self.budget = (max(self.beginners_range) * Experts.expert_price(Experts.Beginner)) + (max(self.medium_range) * Experts.expert_price(Experts.Medium)) + (max(self.experts_range) * Experts.expert_price(Experts.Expert))
-        # logger.log(self.budget)
-        # self.fourth_experiment(show_beginners=False, show_mediums=False)
-
-        # compare expert with combination of mediums and experts
-        # self.num_batch = 1000
-        # self.beginners_range = range(0, 1)
-        # self.medium_range = range(0, 13)
-        # self.experts_range = range(1, 2)
-        # self.accuracy_function = Data.calculate_weighted_most_accuracy
-        # self.accuracy_function = Data.calculate_most_accuracy_with_tie_breaker(tie_breaker=Experts.Expert)
-        # # self.accuracy_function = Data.calculate_most_accuracy
-        # self.budget = (max(self.beginners_range) * Experts.expert_price(Experts.Beginner)) + (max(self.medium_range) * Experts.expert_price(Experts.Medium)) + (max(self.experts_range) * Experts.expert_price(Experts.Expert))
-        # self.fourth_experiment(show_beginners=False, show_mediums=False)
-        #
-        # # compare mediums with combination of beginners and mediums
-        # self.num_batch = 10000
-        # self.beginners_range = range(0, 4)
-        # self.medium_range = range(1, 2)
-        # self.experts_range = range(0, 1)
-        # self.accuracy_function = Data.calculate_weighted_most_accuracy
-        # # self.accuracy_function = Data.calculate_most_accuracy_with_tie_breaker(tie_breaker=Experts.Medium)
-        # # self.accuracy_function = Data.calculate_most_accuracy
-        # self.budget = (max(self.beginners_range) * Experts.expert_price(Experts.Beginner)) + (max(self.medium_range) * Experts.expert_price(Experts.Medium)) + (max(self.experts_range) * Experts.expert_price(Experts.Expert))
-        # self.fourth_experiment(show_beginners=False, show_experts=False)
-
         # compare expert with combination of beginners and experts
-        self.num_batch = 10000
-        self.beginners_range = range(1, 7)
+        self.num_batch = 1000
+        self.beginners_range = range(0, 1)
         self.medium_range = range(0, 1)
-        self.experts_range = range(2, 3)
+        self.experts_range = range(1, 30)
         # self.accuracy_function = Data.calculate_weighted_most_accuracy
-        self.accuracy_function = Data.calculate_most_accuracy_with_tie_breaker(tie_breaker=Experts.Expert)
+        self.accuracy_function = Data.calculate_tie_breaker_accuracy(
+            tie_breaker=Experts.Expert,
+            next_func=Data.calculate_weighted_most_accuracy(
+                next_func=Data.calculate_most_accuracy()
+            ))
         # self.accuracy_function = Data.calculate_most_accuracy
         self.budget = (max(self.beginners_range) * Experts.expert_price(Experts.Beginner)) + (
                 max(self.medium_range) * Experts.expert_price(Experts.Medium)) + (
                               max(self.experts_range) * Experts.expert_price(Experts.Expert))
-        self.experiment(show_beginners=True, show_mediums=True, show_experts=True)
+        self.experiment(show_beginners=False, show_mediums=False, show_experts=False)
